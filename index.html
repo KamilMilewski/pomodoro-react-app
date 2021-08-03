@@ -56,45 +56,100 @@
     .inactive {
       filter: blur(2px) grayscale(1)
     }
-
   </style>
 </head>
 <body>
-  <h1>Kurs Reacta Tydzień 2</h1>
-  <hr>
-  <div class="App">
-    <div class="TimeboxEditor inactive">
-      <label for="Co robisz"><input value="rzeczy" type="text"></label><br>
-      <label for="Ile minut?"><input value="25" type="number"></label><br>
-      <button>Zacznij</button>
-    </div>
-    <div class="Timebox">
-      <h1>rzeczy</h1>
-      <!-- <h2 class="Clock">Pozostało 13:28</h2> -->
-      <div id="root"></div>
-      <div class="ProgressBar">
-        <div style="width: 45%"></div>
-      </div>
-      <button disabled>Start</button>
-      <button>Stop</button>
-      <button>Pauzuj</button>
-      Liczba przerw: 2
-    </div>
-  </div>
+  <div id="root"></div>
+  <!-- <h1>Kurs Reacta Tydzień 2</h1> -->
+  <!-- <hr> -->
+  <!-- <div class="App"> -->
+  <!--   <div class="TimeboxEditor inactive"> -->
+  <!--     <label for="Co robisz"><input value="rzeczy" type="text"></label><br> -->
+  <!--     <label for="Ile minut?"><input value="25" type="number"></label><br> -->
+  <!--     <button>Zacznij</button> -->
+  <!--   </div> -->
+  <!--   <div class="Timebox"> -->
+  <!--     <h1>rzeczy</h1> -->
+  <!--     <!-1- <h2 class="Clock">Pozostało 13:28</h2> -1-> -->
+  <!--     <div id="root"></div> -->
+  <!--     <div class="ProgressBar"> -->
+  <!--       <div style="width: 45%"></div> -->
+  <!--     </div> -->
+  <!--     <button disabled>Start</button> -->
+  <!--     <button>Stop</button> -->
+  <!--     <button>Pauzuj</button> -->
+  <!--     Liczba przerw: 2 -->
+  <!--   </div> -->
+  <!-- </div> -->
 </body>
 <script type="text/javascript">
-  const rootElement = document.getElementById("root");
+  let rootElement = document.getElementById("root");
 
-  <!-- const domElement = document.createElement("h2"); -->
-  <!-- domElement.className = "Clock"; -->
-  <!-- domElement.textContent = "Pozostało 10:20"; -->
-  <!-- rootElement.append(domElement); -->
+  addElement({ type: "h1", root: rootElement, textContent: "Kurs Reacta tydzień 2"});
+  addElement({ type: "hr", root: rootElement})
+  addElement({ type: "div", root: rootElement, attrs: {"class": "App"}, children: [
+      {
+	  type: "div", attrs: {"class": "TimeboxEditor inactive"}, children: [
+	      {
+		  type: "label", attrs: {"for": "Co robisz?"}, children: [
+		      {
+			  type: "input", attrs: {"value": "rzeczy", "type": "text"}
+			}
+		    ]
+		},
+	      { type: "br" },
+	      {
+		  type: "label", attrs: {"for": "Ile minut?"}, children: [
+		      {
+			  type: "input", attrs: {"value": "25", "type": "text"}
+			}
+		    ]
+		},
+	      { type: "br" },
+	      { type: "button", children: [{textContent: "zacznij"}] }
+	    ]
+	},
+      {
+	  type: "div", attrs: {"class": "Timebox"}, children: [
+	    { type: "h1", textContent: "rzeczy" },
+	    { type: "h2", attrs: {"class": "Clock"}, textContent: "Pozostało 12:23" },
+	    { type: "div", attrs: {"id": "root"} },
+	    { type: "div", attrs: {"class": "ProgressBar"}, children: [{type: "div", attrs: {"style": "width: 45%"}}] },
+	    { type: "button", attrs: {"disabled": true}, textContent: "start" },
+	    { type: "button", textContent: "stop" },
+	    { type: "button", textContent: "pauzuj" },
+	    { textContent: "Liczba przerw: 2" }
+	  ]
+      }
+    ],
+  });
+  
+  function addElement({ type, root, attrs={}, textContent, children=[]}) {
+    if (typeof type === "undefined") {
+      root.append(textContent);
+    } else {
+      const thisElement = document.createElement(type);
+      setAttributes(thisElement, attrs)
+      root.append(thisElement);
+      thisElement.textContent = textContent;
 
-  const element = React.createElement(
-    "h2",
-    { className: "Clock", children: "Pozostało 10:20" }
-  );
-  ReactDOM.render(element, rootElement)
+      for (const child of children) {
+	addElement({
+	  type: child.type,
+	  root: thisElement,
+	  attrs: child.attrs,
+	  textContent: child.textContent,
+	  children: child.children 
+	});
+      }
+    }
+  };
+
+  function setAttributes(domElement, attrs) {
+    for(const key in attrs) {
+      domElement.setAttribute(key, attrs[key]);
+    };
+  };
 
 </script>
 </html>
