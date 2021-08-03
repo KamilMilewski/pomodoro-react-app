@@ -46,11 +46,6 @@
       padding: 5px;
     }
 
-    .ProgressBar > div {
-      height: 100%;
-      background-color: orangered;
-    }
-
     .inactive {
       filter: blur(2px) grayscale(1)
     }
@@ -69,9 +64,7 @@
     <div class="Timebox">
       <h1>rzeczy</h1>
       <h2 class="Clock">Pozostało 13:28</h2>
-      <div class="ProgressBar">
-        <div style="width: 45%"></div>
-      </div>
+      <div class="ProgressBar" style="background: linear-gradient(to left, orangered 80%, white 0%); background-clip: content-box;"></div>
       <button disabled>Start</button>
       <button>Stop</button>
       <button>Pauzuj</button>
