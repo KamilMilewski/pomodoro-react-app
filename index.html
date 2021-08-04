@@ -56,45 +56,75 @@
     .inactive {
       filter: blur(2px) grayscale(1)
     }
-
   </style>
 </head>
 <body>
-  <h1>Kurs Reacta Tydzień 2</h1>
-  <hr>
-  <div class="App">
-    <div class="TimeboxEditor inactive">
-      <label for="Co robisz"><input value="rzeczy" type="text"></label><br>
-      <label for="Ile minut?"><input value="25" type="number"></label><br>
-      <button>Zacznij</button>
-    </div>
-    <div class="Timebox">
-      <h1>rzeczy</h1>
-      <!-- <h2 class="Clock">Pozostało 13:28</h2> -->
-      <div id="root"></div>
-      <div class="ProgressBar">
-        <div style="width: 45%"></div>
-      </div>
-      <button disabled>Start</button>
-      <button>Stop</button>
-      <button>Pauzuj</button>
-      Liczba przerw: 2
-    </div>
-  </div>
+  <div id="root"></div>
+  <!-- <h1>Kurs Reacta Tydzień 2</h1> -->
+  <!-- <hr> -->
+  <!-- <div class="App"> -->
+  <!--   <div class="TimeboxEditor inactive"> -->
+  <!--     <label for="Co robisz"><input value="rzeczy" type="text"></label><br> -->
+  <!--     <label for="Ile minut?"><input value="25" type="number"></label><br> -->
+  <!--     <button>Zacznij</button> -->
+  <!--   </div> -->
+  <!--   <div class="Timebox"> -->
+  <!--     <h1>rzeczy</h1> -->
+  <!--     <!-1- <h2 class="Clock">Pozostało 13:28</h2> -1-> -->
+  <!--     <div id="root"></div> -->
+  <!--     <div class="ProgressBar"> -->
+  <!--       <div style="width: 45%"></div> -->
+  <!--     </div> -->
+  <!--     <button disabled>Start</button> -->
+  <!--     <button>Stop</button> -->
+  <!--     <button>Pauzuj</button> -->
+  <!--     Liczba przerw: 2 -->
+  <!--   </div> -->
+  <!-- </div> -->
 </body>
 <script type="text/javascript">
-  const rootElement = document.getElementById("root");
+  let rootElement = document.getElementById("root");
 
-  <!-- const domElement = document.createElement("h2"); -->
-  <!-- domElement.className = "Clock"; -->
-  <!-- domElement.textContent = "Pozostało 10:20"; -->
-  <!-- rootElement.append(domElement); -->
+  elements = [
+    createElement("h1", {}, "Kurs Reacta tydzień 2"),
+    createElement("hr", {}),
+    createElement("div", { className: "App" }, [
+	createElement("div", { className: "TimeboxEditor inactive" }, [
+	    createElement("label", { htmlFor: "Co robisz?" }, [
+		createElement("input", { defaultValue: "rzeczy", type: "text" })
+	    ]),
+	    createElement("br", {}),
+	    createElement("label", { htmlFor: "Ile minut?" }, [
+		createElement("input", { defaultValue: 25, type: "number" })
+	    ]),
+	    createElement("br", {}),
+	    createElement("button", {}, "zacznij")
+	]),
+	createElement("div", { className: "Timebox" }, [
+	    createElement("h1", {}, "rzeczy"),
+	    createElement("h2", { className: "Clock" }, "Pozostało 12:23"),
+	    createElement("div", { id: "root" }, []),
+	    createElement("div", { className: "ProgressBar"}, [
+		createElement("div", { style: { width: "45%" }}) 
+	    ]),
+	    createElement("button", {  disabled: true }, "start"),
+	    createElement("button", {}, "stop"),
+	    createElement("button", {}, "pauzuj"),
+	    "Liczba przerw: 2"
+	])
+    ]) 
+  ]
 
-  const element = React.createElement(
-    "h2",
-    { className: "Clock", children: "Pozostało 10:20" }
-  );
-  ReactDOM.render(element, rootElement)
+  function createElement(...args) {
+    // handle uniq key generation for React
+    createElement.keyIndex = createElement.keyIndex || 0;
+    args[1]["key"] = createElement.keyIndex;
+    createElement.keyIndex++;
+
+    return React.createElement(...args);
+  };
+
+  ReactDOM.render(elements, rootElement)
 
 </script>
 </html>
