@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <title>Kurs Reakta - Tydzien 2</title>
   <style>
     .App {
@@ -70,7 +71,6 @@
     </div>
     <div class="Timebox">
       <h1>rzeczy</h1>
-      <!-- <h2 class="Clock">Pozostało 13:28</h2> -->
       <div id="root"></div>
       <div class="ProgressBar">
         <div style="width: 45%"></div>
@@ -82,18 +82,14 @@
     </div>
   </div>
 </body>
-<script type="text/javascript">
+<script type="text/babel">
   const rootElement = document.getElementById("root");
 
-  <!-- const domElement = document.createElement("h2"); -->
-  <!-- domElement.className = "Clock"; -->
-  <!-- domElement.textContent = "Pozostało 10:20"; -->
-  <!-- rootElement.append(domElement); -->
+  function Clock({ minutes, seconds = "48" }) {
+    return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
+  }
+  const element = (<Clock minutes="17" seconds="34" />);
 
-  const element = React.createElement(
-    "h2",
-    { className: "Clock", children: "Pozostało 10:20" }
-  );
   ReactDOM.render(element, rootElement)
 
 </script>
