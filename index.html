@@ -85,10 +85,18 @@
 <script type="text/babel">
   const rootElement = document.getElementById("root");
 
-  function Clock({ minutes, seconds = "48" }) {
-    return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
-  }
-  const element = (<Clock minutes="17" seconds="34" />);
+  function normalizeClockValue(value) {
+    const valueStr = value.toString();  
+    return valueStr.length === 1 ? "0" + valueStr : valueStr;
+  };
+
+  function Clock({ minutes, seconds = 48 }) {
+    const minutesStr = normalizeClockValue(minutes);
+    const secondsStr = normalizeClockValue(seconds);
+
+    return <h2 className="Clock">Pozostało {minutesStr}:{secondsStr}</h2>
+  };
+  const element = (<Clock minutes={ 7 } seconds={ 0 } />);
 
   ReactDOM.render(element, rootElement)
 
