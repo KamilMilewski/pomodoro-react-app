@@ -63,23 +63,20 @@
 <body>
   <h1>Kurs Reacta Tydzień 2</h1>
   <hr>
-  <div class="App">
-    <div class="TimeboxEditor inactive">
-      <label for="Co robisz"><input value="rzeczy" type="text"></label><br>
-      <label for="Ile minut?"><input value="25" type="number"></label><br>
-      <button>Zacznij</button>
-    </div>
-    <div class="Timebox">
-      <h1>rzeczy</h1>
-      <div id="root"></div>
-      <button disabled>Start</button>
-      <button>Stop</button>
-      <button>Pauzuj</button>
-      Liczba przerw: 2
-    </div>
-  </div>
+  <div id="root"></div>
 </body>
 <script type="text/babel">
+
+  function TimeboxEditor() {
+    return (
+      <div className="TimeboxEditor inactive">
+	<label htmlFor="Co robisz"><input defaultValue="rzeczy" type="text" /></label><br />
+	<label htmlFor="Ile minut?"><input defaultValue="25" type="number" /></label><br />
+	<button>Zacznij</button>
+      </div>
+    );
+  };
+
   function Clock({ minutes = 20, seconds = "48" }) {
     return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
   };
@@ -92,13 +89,33 @@
     );
   };
 
+  function Timebox() {
+    return (
+      <div className="Timebox">
+	<Clock minutes="17" seconds="34" />
+	<ProgressBar />
+	<h1>rzeczy</h1>
+	<button disabled>Start</button>
+	<button>Stop</button>
+	<button>Pauzuj</button>
+	Liczba przerw: 2
+      </div>
+    );
+  }
+
+  function App() {
+    return (
+      <div className="App">
+	<TimeboxEditor />
+	<Timebox />
+      </div>
+    );
+  };
+
 
   ReactDOM.render(
     (
-      <div>
-	<Clock minutes="17" seconds="34" />
-	<ProgressBar />
-      </div>
+      <App />
     ),
     document.getElementById("root")
   );
