@@ -85,24 +85,39 @@
 <script type="text/babel">
   const rootElement = document.getElementById("root");
 
-  function normalizeClockValue(value, prependToDigits = 2) {
-    let valueStr = value.toString();
-   
-    while(valueStr.length < prependToDigits) {
-      valueStr = "0" + valueStr;
+  class ClockValue {
+    constructor(val) {
+      this.value = val;
+    }
+
+    limitTo(upperLimit = 59) {
+      if (this.value < 0) {
+	this.value = 0;
+      } else if (this.value > upperLimit) {
+	this.value = upperLimit;
+      };
+      return this
+    }
+
+    prependTo(prependToDigits = 2) {
+      this.value = this.value.toString();
+     
+      while(this.value.length < prependToDigits) {
+	this.value = "0" + this.value;
+      };
+      return this;
     };
-    return valueStr;
-  };
+  }
 
   function Clock({ hours, minutes, seconds, milliseconds }) {
-    const hoursStr = normalizeClockValue(hours);
-    const minutesStr = normalizeClockValue(minutes);
-    const secondsStr = normalizeClockValue(seconds);
-    const millisecondsStr = normalizeClockValue(milliseconds, 3);
+    const hoursStr =        new ClockValue(hours).limitTo(23).prependTo().value;
+    const minutesStr = 	    new ClockValue(minutes).limitTo(59).prependTo().value;
+    const secondsStr =      new ClockValue(seconds).limitTo(59).prependTo().value;
+    const millisecondsStr = new ClockValue(milliseconds).limitTo(999).prependTo(3).value;
 
     return <h2 className="Clock">Pozostało {hoursStr}:{minutesStr}:{secondsStr}:{millisecondsStr}</h2>
   };
-  const element = (<Clock hours={ 3 } minutes={ 7 } seconds={ 0 } milliseconds={ 23 } />);
+  const element = (<Clock hours={ 25 } minutes={ 77 } seconds={ -5 } milliseconds={ 2333 } />);
 
   ReactDOM.render(element, rootElement)
 
