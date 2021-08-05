@@ -72,9 +72,6 @@
     <div class="Timebox">
       <h1>rzeczy</h1>
       <div id="root"></div>
-      <div class="ProgressBar">
-        <div style="width: 45%"></div>
-      </div>
       <button disabled>Start</button>
       <button>Stop</button>
       <button>Pauzuj</button>
@@ -83,14 +80,29 @@
   </div>
 </body>
 <script type="text/babel">
-  const rootElement = document.getElementById("root");
-
-  function Clock({ minutes, seconds = "48" }) {
+  function Clock({ minutes = 20, seconds = "48" }) {
     return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
-  }
-  const element = (<Clock minutes="17" seconds="34" />);
+  };
 
-  ReactDOM.render(element, rootElement)
+  function ProgressBar({ percent = 33 }) {
+    return (
+      <div className="ProgressBar">
+	<div style={{  width: `${percent}%`  }}></div>
+      </div>
+    );
+  };
+
+
+  ReactDOM.render(
+    (
+      <div>
+	<Clock minutes="17" seconds="34" />
+	<ProgressBar />
+      </div>
+    ),
+    document.getElementById("root")
+  );
+
 
 </script>
 </html>
