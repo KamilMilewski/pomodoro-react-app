@@ -85,19 +85,24 @@
 <script type="text/babel">
   const rootElement = document.getElementById("root");
 
-  function normalizeClockValue(value) {
-    const valueStr = value.toString();  
-    return valueStr.length === 1 ? "0" + valueStr : valueStr;
+  function normalizeClockValue(value, prependToDigits = 2) {
+    let valueStr = value.toString();
+   
+    while(valueStr.length < prependToDigits) {
+      valueStr = "0" + valueStr;
+    };
+    return valueStr;
   };
 
-  function Clock({ hours, minutes, seconds }) {
+  function Clock({ hours, minutes, seconds, milliseconds }) {
     const hoursStr = normalizeClockValue(hours);
     const minutesStr = normalizeClockValue(minutes);
     const secondsStr = normalizeClockValue(seconds);
+    const millisecondsStr = normalizeClockValue(milliseconds, 3);
 
-    return <h2 className="Clock">Pozostało {hoursStr}:{minutesStr}:{secondsStr}</h2>
+    return <h2 className="Clock">Pozostało {hoursStr}:{minutesStr}:{secondsStr}:{millisecondsStr}</h2>
   };
-  const element = (<Clock hours={ 3 } minutes={ 7 } seconds={ 0 } />);
+  const element = (<Clock hours={ 3 } minutes={ 7 } seconds={ 0 } milliseconds={ 23 } />);
 
   ReactDOM.render(element, rootElement)
 
