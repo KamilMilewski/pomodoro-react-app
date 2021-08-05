@@ -90,13 +90,14 @@
     return valueStr.length === 1 ? "0" + valueStr : valueStr;
   };
 
-  function Clock({ minutes, seconds = 48 }) {
+  function Clock({ hours, minutes, seconds }) {
+    const hoursStr = normalizeClockValue(hours);
     const minutesStr = normalizeClockValue(minutes);
     const secondsStr = normalizeClockValue(seconds);
 
-    return <h2 className="Clock">Pozostało {minutesStr}:{secondsStr}</h2>
+    return <h2 className="Clock">Pozostało {hoursStr}:{minutesStr}:{secondsStr}</h2>
   };
-  const element = (<Clock minutes={ 7 } seconds={ 0 } />);
+  const element = (<Clock hours={ 3 } minutes={ 7 } seconds={ 0 } />);
 
   ReactDOM.render(element, rootElement)
 
