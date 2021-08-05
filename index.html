@@ -84,25 +84,23 @@
     return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
   };
 
-  function ProgressBar({ percent = 33 }) {
+  function ProgressBar({ percent = 33, diminishing = false }) {
     return (
       <div className="ProgressBar">
-	<div style={{  width: `${percent}%`  }}></div>
+	<div style={{  width: `${percent}%`, float: diminishing ? "right" : "left"  }}></div>
       </div>
     );
   };
-
 
   ReactDOM.render(
     (
       <div>
 	<Clock minutes="17" seconds="34" />
-	<ProgressBar />
+	<ProgressBar diminishing={ true } />
       </div>
     ),
     document.getElementById("root")
   );
-
 
 </script>
 </html>
