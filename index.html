@@ -77,13 +77,13 @@
     );
   };
 
-  function Clock({ minutes = 20, seconds = "48" }) {
-    return <h2 className="Clock">Pozostało {minutes}:{seconds}</h2>
+  function Clock({ className = "", minutes = 20, seconds = "48" }) {
+    return <h2 className={ "Clock " + className }>Pozostało {minutes}:{seconds}</h2>
   };
 
-  function ProgressBar({ percent = 33 }) {
+  function ProgressBar({ className = "", percent = 33 }) {
     return (
-      <div className="ProgressBar">
+      <div className={ "ProgressBar " + className }>
 	<div style={{  width: `${percent}%`  }}></div>
       </div>
     );
@@ -97,6 +97,9 @@
 	isPaused: false,
 	pausesCount: 2
       }
+      this.handleStart = this.handleStart.bind(this)
+      this.handleStop = this.handleStop.bind(this)
+      this.togglePause = this.togglePause.bind(this)
     }
 
     handleStart(event) {
@@ -114,16 +117,28 @@
       })
     }
 
+    togglePause(event) {
+      this.setState(
+	function(prevState) {
+	  const isPaused = !prevState.isPaused;
+	  return {
+	    isPaused: isPaused,
+	    pausesCount: isPaused ? ++prevState.pausesCount : prevState.pausesCount
+	  }
+	}
+      )
+    }
+
     render() {
       const { isPaused, isRunning, pausesCount } = this.state;
       return (
 	<div className="Timebox">
-	  <Clock minutes="17" seconds="34" />
-	  <ProgressBar />
+	  <Clock className={isPaused ? "inactive" : ""} minutes="17" seconds="34" />
+	  <ProgressBar className={isPaused ? "inactive" : ""} />
 	  <h1>rzeczy</h1>
-	  <button onClick={ this.handleStart.bind(this) } disabled={isRunning}>Start</button>
-	  <button onClick={ this.handleStop.bind(this) } disabled={!isRunning}>Stop</button>
-	  <button disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>
+	  <button onClick={ this.handleStart } disabled={isRunning}>Start</button>
+	  <button onClick={ this.handleStop } disabled={!isRunning}>Stop</button>
+	  <button onClick={ this.togglePause } disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>
 	  Liczba przerw: {pausesCount}
 	</div>
       );
