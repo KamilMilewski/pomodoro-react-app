@@ -1,22 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script></script>
+<!-- Load React. -->
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <style>
-  #WhatAreYouWorkingOnInputsSection {
-    border: 5px black solid;
-    padding: 25px;
+  body {
+    font-family: "sans-serif";
   }
-  #
+  #TimeboxEditor {
+    border: 1px black solid;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border-radius: 5px;
+  }
+  .inactive {
+    filter: blur(2px) grayscale(1);
+  }
+  label {
+    width: 50%;
+  }
+  input {
+    width: 100%;
+  }
+  #Timebox {
+    margin-top: 25px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  #RemainingTimeText {
+    color: orangered;
+  }
+  #ProgressBarContainer {
+    border: 1px orangered solid;
+    width: 95%;
+    padding: 5px;
+    margin-bottom: 5px;
+    height: 25px;
+    border-radius: 5px;
+  }
+  #ProgressBar {
+    background-color: orangered;
+    height: 100%;
+  }
 </style>
 </head>
 <body>
-  <h1>Kurs Reacta Tydzień 2</h1>
+  <h1>Kurs React'a Tydzień 2</h1>
   <hr>
-  <div id="root">
-    <div id="WhatAreYouWorkingOnInputsSection">
-      <label for="rzeczy"><input type="text" defaultValue="rzeczy"></label>
-    </div>
-  </div>
+  <div id="root" />
 </body>
+<script type="text/babel">
+  const root = document.getElementById("root");
+
+  function TimeboxEditor(props) {
+    return (
+      <div id="TimeboxEditor" className="inactive">
+	<label htmlFor="rzeczy"><input type="text" placeholder="rzeczy" /></label>
+	<label htmlFor="progress"><input type="integer" placeholder="2%" /></label>
+	<button type="button">Zacznij</button>
+      </div>
+    );
+  }
+
+  class Timebox extends React.Component {
+    constructor(props) {
+      super(props);
+      this.tickPeriodInMiliseconds = 100
+      this.timeTotalInSeconds = 121
+      this.state = {
+	isRunning: false,
+	isPaused: false,
+	breaksCount: 0,
+	timeLeftInSeconds: this.timeTotalInSeconds
+      }
+    }
+
+    render() {
+      const {isRunning, isPaused, breaksCount, timeLeftInSeconds} = this.state
+      const progressPercentage = 100 - ( timeLeftInSeconds / this.timeTotalInSeconds ) * 100
+      const minutesLeft = Math.trunc(timeLeftInSeconds / 60);
+      const secondsLeft = Math.trunc(timeLeftInSeconds % 60);
+
+      return (
+	<div id="Timebox">
+	  <h2 id="RemainingTimeText" className={isPaused ? "inactive" : ""}>Pozostało {minutesLeft}:{secondsLeft}</h2>
+	  <div id="ProgressBarContainer" className={isPaused ? "inactive" : ""}>
+	    <div id="ProgressBar" style={{ width: `${progressPercentage}%`}}></div>
+	  </div>
+	  <h1>rzeczy</h1>
+	  <div>
+	    <button onClick={this.handleStart.bind(this)} disabled={isRunning}>Start</button>
+	    <button onClick={this.handleStop.bind(this)} disabled={!isRunning}>Stop</button>
+	    <button onClick={this.handlePause.bind(this)} disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>
+	    Liczba przerw: {breaksCount}
+	  </div>
+	</div>
+      );
+    }
+
+    handleStart() {
+      this.setState({
+	isRunning: true,
+	isPaused: false
+      })
+
+      this.startTimer();
+    }
+
+    handleStop() {
+      this.setState({
+	isRunning: false,
+	isPaused: false,
+	breaksCount: 0,
+	timeLeftInSeconds: this.timeTotalInSeconds
+      })
+
+      this.stopTimer();
+    }
+
+    handlePause() {
+      this.setState((state, props) => ({
+	isPaused: !state.isPaused,
+	breaksCount: state.isPaused ? state.breaksCount : ++state.breaksCount
+      }))
+
+      this.state.isPaused ? this.startTimer() : this.stopTimer();
+    }
+
+    startTimer() {
+      this.timerID = setInterval(
+	() => this.tick(),
+	this.tickPeriodInMiliseconds
+      )
+    }
+
+    stopTimer() {
+      clearTimeout(this.timerID);
+    }
+
+    tick() {
+      const substractTimeValueInSeconds = this.tickPeriodInMiliseconds / 1000
+
+      this.setState((state, props) => ({
+	timeLeftInSeconds: state.timeLeftInSeconds - substractTimeValueInSeconds
+      }));
+    }
+
+  }
+  ReactDOM.render(
+    <div>
+      <TimeboxEditor />
+      <Timebox />
+    </div>,
+    root
+  )
+</script>
 </html>
