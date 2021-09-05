@@ -182,7 +182,8 @@
 
     render() {
       const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
-      const totalTimeInSeconds = 25;
+      const { title, totalTimeInMinutes } = this.props
+      const totalTimeInSeconds = totalTimeInMinutes * 60;
       const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
       const minutesLeft = Math.floor(timeLeftInSeconds/60);
       const secondsLeft = Math.floor(timeLeftInSeconds%60);
@@ -191,7 +192,7 @@
 	<div className="Timebox">
 	  <Clock className={isPaused ? "inactive" : ""} minutes={ minutesLeft } seconds={ secondsLeft }/>
 	  <ProgressBar percent={progressInPercent} className={isPaused ? "inactive" : ""} />
-	  <h1>rzeczy</h1>
+	  <h1>{title}</h1>
 	  <button onClick={ this.handleStart } disabled={isRunning}>Start</button>
 	  <button onClick={ this.handleStop } disabled={!isRunning}>Stop</button>
 	  <button onClick={ this.togglePause } disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>
@@ -201,11 +202,25 @@
     }
   }
 
+  class EditableTimebox extends React.Component {
+    state = {
+      title: "Uczę się o kontrolowanych komponentach",
+      totalTimeInMinutes: 15
+    }
+    render() {
+      const { title, totalTimeInMinutes } = this.state;
+      return (
+	<>
+	  <TimeboxEditor />
+	  <Timebox title={title} totalTimeInMinutes={totalTimeInMinutes} />
+	</>
+      )
+    }
+  }
   function App() {
     return (
       <div className="App">
-	<TimeboxEditor />
-	<Timebox />
+	<EditableTimebox />
       </div>
     );
   };
