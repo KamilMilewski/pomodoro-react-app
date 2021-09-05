@@ -61,20 +61,47 @@
   </style>
 </head>
 <body>
-  <h1>Kurs Reacta Tydzień 2</h1>
+  <h1>Kurs Reacta Tydzień 3</h1>
   <hr>
   <div id="root"></div>
 </body>
 <script type="text/babel">
 
-  function TimeboxEditor() {
-    return (
-      <div className="TimeboxEditor inactive">
-	<label htmlFor="Co robisz"><input defaultValue="rzeczy" type="text" /></label><br />
-	<label htmlFor="Ile minut?"><input defaultValue="25" type="number" /></label><br />
-	<button>Zacznij</button>
-      </div>
-    );
+  class TimeboxEditor extends React.Component {
+    state = {
+      title: "Uczę się o kontrolowanych komponentach",
+      totalTimeInMinutes: 15
+    }
+    handleTitleChange = (event) => {
+      this.setState({title: event.target.value});
+    }
+    handleTotalTimeInMinutesChange = (event) => {
+      this.setState({totalTimeInMinutes: event.target.value});
+    }
+    render() {
+      const { title, totalTimeInMinutes } = this.state;
+      return (
+	<div className="TimeboxEditor">
+	  <label htmlFor="Co robisz">
+	    <input
+	      disabled={false}
+	      value={title}
+	      type="text"
+	      onChange={this.handleTitleChange}
+	    />
+	  </label><br />
+	  <label htmlFor="Ile minut?">
+	    <input
+	      disabled={false}
+	      value={totalTimeInMinutes}
+	      type="number"
+	      onChange={this.handleTotalTimeInMinutesChange}
+	    />
+	  </label><br />
+	  <button>Zacznij</button>
+	</div>
+      );
+    }
   }
 
   function Clock({ className = "", minutes = 20, seconds = "48" }) {
